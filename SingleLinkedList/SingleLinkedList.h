@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include <ostream>
 
 template <typename T> class SingleLinkedList;
@@ -9,6 +9,7 @@ class SingleLinkedList
 {
 public:
     SingleLinkedList();
+    SingleLinkedList(std::initializer_list<T> values);
     ~SingleLinkedList();
 
     void Add(const T& value);
@@ -16,6 +17,7 @@ public:
     LinkedListIterator<T> cbegin() const;
     LinkedListIterator<T> cend() const;
 
+    // TODO: Возможно избыточная особенность поведения
     friend std::ostream& operator<<(std::ostream& out, const SingleLinkedList& list)
     {
         auto current = list.head;
@@ -28,6 +30,7 @@ public:
         return out << *current << " }";
     }
 
+    // TODO: Нужно пересмотреть данный тип, так как он теперь виден вовне
     class ListItem
     {
     public:
@@ -52,6 +55,13 @@ template <typename T>
 SingleLinkedList<T>::SingleLinkedList()
     : head(nullptr), tail(nullptr)
 {
+}
+
+template <typename T>
+SingleLinkedList<T>::SingleLinkedList(std::initializer_list<T> values)
+    : SingleLinkedList()
+{
+    std::for_each(values.begin(), values.end(), [this](const T item) { this->Add(item); });
 }
 
 template <typename T>
